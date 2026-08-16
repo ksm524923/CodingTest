@@ -1,0 +1,46 @@
+name: Organize solutions by language
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "프로그래머스/[0-9]*/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: organize-solutions-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  organize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Organize new solutions
+        shell: pwsh
+        run: ./scripts/organize-solutions.ps1
+
+      - name: Commit organized solutions
+        shell: bash
+        run: |
+          git add --all -- "프로그래머스"
+
+          if git diff --cached --quiet; then
+            echo "No solutions need to be organized."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "풀이 언어별 자동 정리 [skip ci]"
+          git push
