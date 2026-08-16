@@ -2,10 +2,10 @@ class Solution {
     public int[] solution(int n, int[] numlist) {
         
         int a=0;
-        int[] answer = {numlist.length};
+        // int[] answer = {numlist.length};
         for(int i=0;i<numlist.length;i++){
             if(numlist[i]%n==0){
-                answer=numlist;
+                // answer=numlist;
             a++;
             }
             }
@@ -14,7 +14,7 @@ class Solution {
         int[] arr=new int[a];
         for(int i=0;i<numlist.length;i++){
             if(numlist[i]%n==0){
-                arr[k]=numlist[i];
+                arr[a]=numlist[i];
                 k++;
             }
         }
